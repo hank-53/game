@@ -21,6 +21,10 @@ std::shared_ptr<Scene> main_scene;
 std::shared_ptr<Scene> game_scene1;
 std::shared_ptr<Scene> game_scene2;
 std::shared_ptr<Scene> select_scene;
+const int TARGET_FPS = 60;
+const float FIXED_TIMESTEP = 1000.0f / TARGET_FPS;
+Uint32 previousTime = SDL_GetTicks();
+float lag = 0.0f;
 
 
 
@@ -40,10 +44,19 @@ void App::Start() {
 }
 
 void App::Update() {
+    Uint32 currentTime = SDL_GetTicks();
+    float elapsed = currentTime - previousTime;
+    previousTime = currentTime;
+    lag += elapsed;
+
+    while (lag >= FIXED_TIMESTEP) {
+        scene_manager.on_update();
+        lag -= FIXED_TIMESTEP;
+    }
     
     //TODO: do your things here and delete this line <3
     scene_manager.on_render();
-    scene_manager.on_update();
+    // scene_manager.on_update();
     /*
      * Do not touch the code below as they serve the purpose for
      * closing the window.

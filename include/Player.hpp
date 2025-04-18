@@ -286,6 +286,8 @@ public:
     
         ApplyGravity(deltaTime);
         m_IsOnGround = false;
+        Is_Attack = false;
+        
     
         // 先處理攻擊狀態：不能被打斷
         if (m_CurrentState == PlayerState::Attack) {
